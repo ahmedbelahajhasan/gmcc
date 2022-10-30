@@ -1,69 +1,60 @@
 const router = require("express").Router();
 const User = require("../models/User");
-const CryptoJS = require("crypto-js");
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
+const saltRound = 10;
 //REGISTER
 router.post("/register", async (req, res) => {
-  const newUser = new User({
-    username: req.body.username,
-    email: req.body.email,
-    password: CryptoJS.AES.encrypt(
-      req.body.password,
-      process.env.PASS_SEC
-    ).toString(),
-  });
-
   try {
-    const savedUser = await newUser.save();
-    res.status(201).json(savedUser);
+    // const {_,email}=req.body
+    // const findUser= User.findOne({email})
+    // console.log(findUser)
+    // if(findUser){
+    //   return res.status(400).send({errors:[{msg:'email should be unique'}]});
+    //   }
+    const newUser = new User({
+      ...req.body,
+    });
+    const hashedPassword = await bcrypt.hash(req.body.password, saltRound);
+    newUser.password = hashedPassword;
+    await newUser.save();
+    res.status(201).send({ msg: "register succ", user: newUser });
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).send(err);
   }
 });
 
 //LOGIN
 
-router.post('/login', async (req, res) => {
-    try{
-        const user = await User.findOne(
-            {
-                userName: req.body.user_name
-            }
-        );
+router.post("/login", async (req, res) => {
+  // req.body { username:'admin',password:'123456'}
+  // req.body.username
+  const { username, password } = req.body;
+  try {
+    const user = await User.findOne({
+      username,
+    });
 
-        !user && res.status(401).json("Wrong User Name");
-
-        const hashedPassword = CryptoJS.AES.decrypt(
-            user.password,
-            process.env.PASS_SEC
-        );
-
-
-        const originalPassword = hashedPassword.toString(CryptoJS.enc.Utf8);
-
-        const inputPassword = req.body.password;
-        
-        originalPassword != inputPassword && 
-            res.status(401).json("Wrong Password");
-
-        const accessToken = jwt.sign(
-        {
-            id: user._id,
-            isAdmin: user.isAdmin,
-        },
-        process.env.JWT_SEC,
-            {expiresIn:"3d"}
-        );
-  
-        const { password, ...others } = user._doc;  
-        res.status(200).send({...others, accessToken});
-
-    }catch(err){
-      console.log('err',err)
-        res.status(500).send(err);//json aawadhneha b send khater tet9ouheb
+    if (!user) {
+      return res.status(401).json("Wrong User Name");
+    }
+    const comparePass = await bcrypt.compare(password, user.password);
+    if (!comparePass) {
+      return res.status(401).json("Wrong password");
     }
 
+    const accessToken = jwt.sign(
+      {
+        id: user._id,
+      },
+      process.env.JWT_SEC,
+      { expiresIn: "3d" }
+    );
+
+    res.status(200).send({ user: user, accessToken });
+  } catch (err) {
+    res.status(500).send(err);
+  }
 });
 
 module.exports = router;

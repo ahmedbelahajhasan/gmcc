@@ -1,9 +1,6 @@
 import styled from "styled-components";
-import Navbar from "../components/Navbar";
-import Announcement from "../components/Announcement";
 import Products from "../components/Products";
 import Newsletter from "../components/Newsletter";
-import Footer from "../components/Footer";
 import { mobile } from "../responsive";
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
@@ -54,12 +51,10 @@ const ProductList = () => {
       [e.target.name]:value,
     });
   }
-  console.log('filters',filters)
 
   return (
     <Container>
-      <Navbar />
-      <Announcement />
+      
       <Title>{cat}</Title>
       <FilterContainer>
         <Filter>
@@ -97,7 +92,6 @@ const ProductList = () => {
       </FilterContainer>
       <Products  cat={cat} filters={filters} sort={sort}/>
       <Newsletter />
-      <Footer />
     </Container>
   );
 };

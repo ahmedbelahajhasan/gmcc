@@ -1,4 +1,9 @@
+import { Error } from "@material-ui/icons";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { register } from "../redux/apiCalls";
 
 const Container = styled.div`
   width: 100vw;
@@ -53,22 +58,37 @@ const Button = styled.button`
 `;
 
 const Register = () => {
+  const [user,setUser]=useState({})
+  const handleChange=(e)=>{
+    setUser({
+      ...user,
+      [e.target.name]:e.target.value
+    })
+  }
+  const navigate=useNavigate()
+  const dispatch =useDispatch()
+  const handleClick = (e) => {
+    e.preventDefault();
+    register(dispatch,user,navigate);// 1:31 w9eft houni//1:34 mochkla user
+  };
+  const{error}=useSelector((state)=>state.user);
   return (
     <Container>
       <Wrapper>
         <Title>CREATE AN ACCOUNT</Title>
         <Form>
-          <Input placeholder="name" />
-          <Input placeholder="last name" />
-          <Input placeholder="username" />
-          <Input placeholder="email" />
-          <Input placeholder="password" />
-          <Input placeholder="confirm password" />
+          <Input placeholder="name" name="name" onChange={handleChange}/>
+          <Input placeholder="last name" name="lastname" onChange={handleChange}/>
+          <Input placeholder="username" name="username" onChange={handleChange}/>
+          <Input placeholder="email" name="email" onChange={handleChange}/>
+          <Input placeholder="password" name="password" onChange={handleChange}/>
+          <Input placeholder="confirm password" name="confirmpassword"  onChange={handleChange}/>
           <Agreement>
             By creating an account, I consent to the processing of my personal
             data in accordance with the <b>PRIVACY POLICY</b>
           </Agreement>
-          <Button>CREATE</Button>
+          <Button onClick={handleClick}>CREATE</Button>
+          {error&&<Error>Something went wrong...</Error>}
         </Form>
       </Wrapper>
     </Container>

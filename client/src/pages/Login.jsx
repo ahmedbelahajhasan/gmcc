@@ -3,6 +3,7 @@ import { mobile } from "../responsive";
 import { useState } from "react";
 import { login } from "../redux/apiCalls";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -68,6 +69,7 @@ const Error=styled.span`
 color:red;
 `
 const Login = () => {
+  const navigate=useNavigate()
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const dispatch=useDispatch();
@@ -75,7 +77,7 @@ const Login = () => {
 
   const handleClick = (e) => {
     e.preventDefault();
-    login(dispatch,{username,password});// 1:31 w9eft houni//1:34 mochkla user
+    login(dispatch,{username,password},navigate);// 1:31 w9eft houni//1:34 mochkla user
   };
   return (
     <Container>

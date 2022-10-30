@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Announcement from "../components/Announcement";
-import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
 import Newsletter from "../components/Newsletter";
 import { publicRequest } from "../requestMethods";
 import { mobile } from "../responsive";
@@ -161,8 +159,7 @@ const Product = () => {
 
   return (
     <Container>
-      <Navbar />
-      <Announcement />
+     
       <Wrapper>
         <ImgContainer>
           <Image src={product.img}/>
@@ -200,7 +197,6 @@ const Product = () => {
         </InfoContainer>
       </Wrapper>
       <Newsletter />
-      <Footer />
     </Container>
   );
 };
