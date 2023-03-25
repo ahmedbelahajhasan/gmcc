@@ -93,8 +93,8 @@ const Navbar = ({ isAuth }) => {
           ) : (
             <MenuItem
               onClick={() => {
-                navigate("/");
-                localStorage.clear();
+                navigate("/login");
+                localStorage.removeItem('userToken');
               }}>
               LOG OUT
             </MenuItem>

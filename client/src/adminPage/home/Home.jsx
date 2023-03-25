@@ -3,6 +3,7 @@ import FeaturedInfo from "../../admin/featuredInfo/FeaturedInfo";
 import "./home.css";
 import { userData } from "../../dummyData";
 import WidgetSm from "../../admin/widgetSm/WidgetSm";
+import WidgetSmP from "../../admin/widgetSm/widgetsmProducts";
 import WidgetLg from "../../admin/widgetLg/WidgetLg";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -18,7 +19,9 @@ export default function Home({isAuth}) {
       <Chart data={userData} title="User Analytics" grid dataKey="Active User"/>
       <div className="homeWidgets">
         <WidgetSm/>
-        <WidgetLg/>
+        <WidgetSmP/>
+        
+       
       </div>
       </>
       : <p>Not authorized</p>}

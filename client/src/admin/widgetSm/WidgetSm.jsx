@@ -17,6 +17,7 @@ export default function WidgetSm() {
     getUsers();
   },[])
   return (
+    
     <div className="widgetSm">
       <span className="widgetSmTitle">New Join Members</span>
       <ul className="widgetSmList">
@@ -27,6 +28,7 @@ export default function WidgetSm() {
             alt=""
             className="widgetSmImg"
           />
+
           <div className="widgetSmUser">
             <span className="widgetSmUsername">{user.username}</span>
           </div>
@@ -40,3 +42,9 @@ export default function WidgetSm() {
     </div>
   );
 }
+
+
+
+
+
+
